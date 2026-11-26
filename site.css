@@ -721,13 +721,6 @@ fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; }
 .stat-facts b { font-size: clamp(24px, 2.4vw, 32px); }
 @media (max-width: 720px) { .stat-facts { grid-template-columns: 1fr 1fr; } }
 
-/* Founder photo (Home) */
-.founder { align-items: center; }
-.founder-photo { position: relative; margin: 0; aspect-ratio: 4 / 5; max-width: 420px; width: 100%; overflow: hidden; border-radius: var(--r-xl); background: #D9DADF; justify-self: center; }
-/* The portrait has a lot of empty backdrop: zoom to head and torso */
-.founder-photo img { position: absolute; width: 180%; max-width: none; height: auto; left: -42%; top: -56%; }
-@media (max-width: 860px) { .founder-photo { max-width: 320px; } }
-
 /* Quote page has no sticky bar pulling people away from the form */
 @media (max-width: 720px) { body.no-bar { padding-bottom: 0; } }
 
