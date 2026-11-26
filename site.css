@@ -661,8 +661,18 @@ fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; }
 .logos-static .mq-track { width: auto; flex-wrap: wrap; justify-content: center; padding: 10px 0 14px; }
 .logos-static .mq-item.is-pop .mq-card { transform: none; }
 
-/* Longer hero headline */
-.hero-title-long { font-size: clamp(38px, 5.2vw, 68px); }
+/* Home headline: two even lines where the column is wide enough, four short lines on phones.
+   Size follows the width of its own column, so no line can overflow or wrap unevenly. */
+.hero-copy { container-type: inline-size; }
+.hero-title-long { font-size: clamp(34px, 9cqw, 64px); line-height: 1.02; }
+.hero-title-long .ln-in, .hero-title-long .nb { white-space: nowrap; }
+@media (min-width: 961px) { .hero-grid { grid-template-columns: 1.2fr 1fr; } }
+@container (max-width: 469px) {
+  .hero-title-long { font-size: clamp(34px, 15cqw, 60px); line-height: 1; }
+  .hero-title-long .nb { display: block; }
+}
+.hero-copy .eyebrow { text-wrap: balance; }
+.hero-copy .lede { text-wrap: pretty; }
 
 /* Work cards with their own links */
 .wshot { display: block; text-decoration: none; color: inherit; }
@@ -688,6 +698,8 @@ fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; }
 .qa-launch { position: fixed; right: max(18px, env(safe-area-inset-right, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 45; display: inline-flex; align-items: center; gap: 9px; min-height: 48px; padding: 0 18px 0 14px; border: 0; border-radius: 999px; background: var(--ink); color: #fff; font: 600 15.5px var(--body); cursor: pointer; box-shadow: 0 14px 30px -12px rgba(14,27,61,.55); }
 .qa-launch:hover { background: #18295A; }
 .qa-launch svg { width: 20px; height: 20px; }
+.qa-launch.qa-wait { opacity: 0; pointer-events: none; }
+.qa-launch { transition: opacity .25s; }
 .qa-panel { position: fixed; right: max(18px, env(safe-area-inset-right, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 60; width: min(380px, calc(100vw - 24px)); height: min(560px, calc(100dvh - 36px)); display: grid; grid-template-rows: auto 1fr auto auto; background: var(--card); border: 1px solid var(--line-2); border-radius: var(--r-lg); overflow: hidden; box-shadow: 0 30px 70px -24px rgba(14,27,61,.5); }
 .qa-panel[hidden] { display: none; }
 .qa-head { display: flex; align-items: start; gap: 12px; padding: 16px 14px 14px 18px; background: var(--ink); color: #fff; }
@@ -706,7 +718,8 @@ fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; }
 .qa-form input { flex: 1; min-width: 0; min-height: 44px; padding: 0 14px; border: 1.5px solid var(--line-2); border-radius: 999px; font: 400 16px var(--body); color: var(--ink); background: var(--card); }
 .qa-form button { flex: none; min-height: 44px; padding: 0 16px; border: 0; border-radius: 999px; background: var(--blue); color: #fff; font: 600 15px var(--body); cursor: pointer; }
 @media (max-width: 720px) {
-  .qa-launch { bottom: calc(82px + env(safe-area-inset-bottom, 0px)); right: 14px; }
+  .qa-launch { bottom: calc(82px + env(safe-area-inset-bottom, 0px)); right: 14px; width: 48px; height: 48px; min-height: 0; padding: 0; justify-content: center; }
+  .qa-launch .qa-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   body.no-bar .qa-launch { bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
   .qa-panel { right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); height: min(560px, calc(100dvh - 24px)); }
 }

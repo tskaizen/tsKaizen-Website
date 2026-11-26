@@ -447,7 +447,8 @@ document.querySelectorAll("[data-tabs]").forEach(function (root) {
 
   const launch = document.createElement("button");
   launch.type = "button"; launch.className = "qa-launch"; launch.setAttribute("aria-haspopup", "dialog");
-  launch.innerHTML = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h14v9H9l-4 3v-3H3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Questions?';
+  launch.innerHTML = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h14v9H9l-4 3v-3H3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span class="qa-label">Questions?</span>';
+  launch.setAttribute("aria-label", "Open the questions assistant");
   const panel = document.createElement("section");
   panel.className = "qa-panel"; panel.hidden = true; panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "tsKaizen assistant");
   panel.innerHTML = '<div class="qa-head"><div><b>tsKaizen assistant</b><span>Set answers about prices, timing and how it works. Anything else goes to Anthony.</span></div><button type="button" class="qa-close" aria-label="Close assistant">&times;</button></div>'
@@ -502,6 +503,10 @@ document.querySelectorAll("[data-tabs]").forEach(function (root) {
     input.focus({ preventScroll: true });
   }
   function close() { panel.hidden = true; launch.hidden = false; launch.focus(); }
+  // On phones the button waits until the visitor scrolls past the top of the page, so it never covers the headline area
+  const phone = window.matchMedia && matchMedia("(max-width: 720px)");
+  function late() { launch.classList.toggle("qa-wait", !!(phone && phone.matches) && window.scrollY < 480); }
+  window.addEventListener("scroll", late, { passive: true }); window.addEventListener("resize", late); late();
   launch.addEventListener("click", open);
   panel.querySelector(".qa-close").addEventListener("click", close);
   panel.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
