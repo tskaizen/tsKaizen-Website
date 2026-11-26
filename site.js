@@ -363,7 +363,7 @@ document.querySelectorAll("[data-tabs]").forEach(function (root) {
     cards.forEach(function (c, i) {
       const pos = (i - cur + cards.length) % cards.length;
       c.dataset.pos = pos;
-      c.setAttribute("aria-hidden", pos === 0 ? "false" : "true");
+      c.setAttribute("aria-hidden", pos === 0 ? "false" : "true"); c.querySelectorAll("a, button").forEach(function (l) { if (pos === 0) l.removeAttribute("tabindex"); else l.setAttribute("tabindex", "-1"); });
     });
     dots.forEach(function (d, i) { d.setAttribute("aria-selected", i === cur ? "true" : "false"); });
   }
