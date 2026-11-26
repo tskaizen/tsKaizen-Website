@@ -1,6 +1,6 @@
 # tsKaizen
 
-> tsKaizen builds websites, missed-call follow-up and AI assistants for home and mobile service businesses (plumbing, roofing, HVAC, painting, mobile detailing, pressure washing) in Orlando and Palm Beach County, Florida. Founder: Anthony Pichardo. Every project starts with a free working demo of the new home page, delivered within 5 business days.
+> tsKaizen builds websites, follow-up and AI assistants for home and mobile service businesses (plumbing, roofing, HVAC, painting, mobile detailing, pressure washing) in Orlando and Palm Beach County, Florida. Founder: Anthony Pichardo. Every project starts with a free working demo of the new home page, delivered within 5 business days.
 
 ## Key pages
 - [Home](https://tskaizen.com/): what tsKaizen does and the free demo
