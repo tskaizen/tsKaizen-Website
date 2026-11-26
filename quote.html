@@ -19,14 +19,14 @@
 <link rel="stylesheet" href="site.css">
 <script>document.documentElement.classList.add("js")</script>
 </head>
-<body>
+<body class="no-bar">
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><nav class="wrap nav" aria-label="Main">
   <a class="brand" href="/" aria-label="tsKaizen home"><svg xmlns="http://www.w3.org/2000/svg" class="brand-mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M 35.00 26.02 A 30.00 30.00 0 1 0 65.90 26.56 Q 67.28 28.21 70.05 28.10 L 77.17 28.38" fill="none" stroke="#2B59FF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M 87.58 19.33 L 84.13 33.19 L 73.37 20.82 Z" fill="#FF6B4A" stroke="#FF6B4A" stroke-width="2" stroke-linejoin="round"/><circle cx="50" cy="52" r="7" fill="#FF6B4A"/></svg><span>tsKaizen</span></a>
   <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
   <div class="nav-links" id="nav-links">
     <ul><li><a href="/">Home</a></li><li><a href="/trades">Trades</a></li><li><a href="/pricing">Pricing</a></li><li><a href="/work">Work</a></li><li><a href="/about">About</a></li></ul>
-    <div class="nav-cta"><a class="btn btn-ghost btn-sm" href="/quote">Get a quote</a><a class="btn btn-primary btn-sm" href="/#demo">Free demo</a></div>
+    <div class="nav-cta"><a class="btn btn-primary btn-sm" href="/#demo">Free demo</a></div>
   </div>
 </nav></header>
 <main id="main">
@@ -48,7 +48,7 @@
 <section class="section">
   <div class="wrap quote-grid">
     <form class="form" id="quote-form" novalidate>
-      <div class="form-progress" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="form-progress" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
       <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
       <input type="hidden" name="_subject" value="New quote request from tskaizen site">
       <div class="field-row">
@@ -72,16 +72,6 @@
 
       <div class="field"><label for="q-trade">Your trade</label><select id="q-trade" name="trade"><option value="">Choose one</option><option value="Plumbing">Plumbing</option><option value="Roofing">Roofing</option><option value="HVAC">HVAC</option><option value="Painting">Painting</option><option value="Mobile detailing">Mobile detailing</option><option value="Pressure washing">Pressure washing</option><option value="Other">Something else</option></select></div>
       <div class="field"><label for="q-site">Current website <span class="opt">(optional)</span></label><input id="q-site" name="current_site" type="url" placeholder="https://"></div>
-
-      <fieldset>
-        <legend>About how many pages?</legend>
-        <div class="choices">
-          <label class="choice"><input type="radio" name="pages" value="1 to 3" id="q-pages-1"><span>1 to 3</span></label>
-          <label class="choice"><input type="radio" name="pages" value="4 to 6" id="q-pages-2"><span>4 to 6</span></label>
-          <label class="choice"><input type="radio" name="pages" value="7 or more" id="q-pages-3"><span>7 or more</span></label>
-          <label class="choice"><input type="radio" name="pages" value="Not sure" id="q-pages-4"><span>Not sure</span></label>
-        </div>
-      </fieldset>
 
       <fieldset>
         <legend>Interested in any add-ons? <span class="opt">(optional)</span></legend>
@@ -155,8 +145,9 @@
         <a class="textlink" href="/work">See all three client projects &rarr;</a>
       </div>
       <div class="side-card">
-        <h2 class="h3">Prefer email?</h2>
-        <p class="hint">Send the same details here and I'll quote from there.</p>
+        <h2 class="h3">Prefer to text or email?</h2>
+        <p class="hint">Send the same details and I'll quote from there.</p>
+        <div class="btn-row"><a class="btn btn-secondary btn-sm" href="sms:+15612603951">Text 561-260-3951</a><a class="btn btn-secondary btn-sm" href="tel:+15612603951">Call</a></div>
         <div class="email-box"><code data-email>anthony@tskaizen.com</code><button class="btn btn-secondary btn-sm" type="button" data-copy-email>Copy</button></div>
       </div>
     </div>
@@ -164,7 +155,6 @@
 </section>
 
 </main>
-<nav class="mobile-cta" aria-label="Quick actions"><a class="btn btn-ghost" href="tel:+15612603951">Call or text</a><a class="btn btn-primary" href="/#demo">Free demo</a></nav>
 <footer class="site-footer"><div class="wrap">
   <div class="foot-top">
     <div class="foot-brand"><a class="brand" href="/"><svg xmlns="http://www.w3.org/2000/svg" class="brand-mark" viewBox="0 0 100 100" aria-hidden="true"><path d="M 35.00 26.02 A 30.00 30.00 0 1 0 65.90 26.56 Q 67.28 28.21 70.05 28.10 L 77.17 28.38" fill="none" stroke="#2B59FF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M 87.58 19.33 L 84.13 33.19 L 73.37 20.82 Z" fill="#FF6B4A" stroke="#FF6B4A" stroke-width="2" stroke-linejoin="round"/><circle cx="50" cy="52" r="7" fill="#FF6B4A"/></svg><span>tsKaizen</span></a>

@@ -2,6 +2,29 @@
 const FORM_ENDPOINT = "https://formspree.io/f/xkolwdag";
 const CONTACT_EMAIL = "anthony@tskaizen.com";
 const QUOTE_TURNAROUND = "2 business days";
+const CONTACT_PHONE = "561-260-3951";
+// Google Analytics 4. Paste the Measurement ID (looks like "G-XXXXXXXXXX") between the quotes.
+// While it is empty nothing loads and nothing is tracked.
+const GA_ID = "";
+
+// ---- Analytics ----
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+if (GA_ID) {
+  const ga = document.createElement("script");
+  ga.async = true; ga.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
+  document.head.appendChild(ga);
+  gtag("js", new Date()); gtag("config", GA_ID);
+}
+// Named events: demo_request, quote_request, contact_click, live_site_click, assistant_open, assistant_question
+function track(name, params) { if (GA_ID) gtag("event", name, params || {}); }
+document.addEventListener("click", function (e) {
+  const a = e.target.closest && e.target.closest("a[href]");
+  if (!a) return;
+  const h = a.getAttribute("href");
+  if (/^(tel|sms|mailto):/.test(h)) track("contact_click", { method: h.split(":")[0] });
+  else if (a.target === "_blank" && /^https:/.test(h)) track("live_site_click", { url: h });
+});
 
 // Every page opens at the top, including when returning with Back
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
@@ -65,6 +88,7 @@ function selectEmail(btn) {
     try {
       const res = await fetch(FORM_ENDPOINT, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
       if (!res.ok) throw new Error("Bad response");
+      track("quote_request", { plan: form.elements.plan ? form.elements.plan.value : "" });
       form.reset();
       status.className = "form-status ok";
       status.textContent = "Got it. Your quote will land in your inbox within " + QUOTE_TURNAROUND + ".";
@@ -86,7 +110,6 @@ function selectEmail(btn) {
     function () { return form.elements.name.value.trim() && form.elements.business.value.trim(); },
     function () { return /.+@.+\..+/.test(form.elements.email.value); },
     function () { return !!form.querySelector("input[name=need]:checked"); },
-    function () { return !!form.querySelector("input[name=pages]:checked"); },
     function () { return form.elements.details.value.trim().length > 10; },
   ];
   const update = function () { checks.forEach(function (fn, i) { bars[i].classList.toggle("on", !!fn()); }); };
@@ -105,6 +128,7 @@ document.querySelectorAll("form[data-formspree]").forEach(function (form) {
     try {
       const res = await fetch(FORM_ENDPOINT, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
       if (!res.ok) throw new Error("Bad response");
+      track("demo_request");
       form.reset();
       status.className = "form-status ok";
       status.textContent = form.dataset.success || "Got it. We'll reply within " + QUOTE_TURNAROUND + ".";
@@ -386,4 +410,120 @@ document.querySelectorAll("[data-tabs]").forEach(function (root) {
   deck.addEventListener("mouseenter", function () { clearInterval(timer); });
   deck.addEventListener("mouseleave", auto);
   lay(); auto();
+})();
+
+// Guided assistant: a chat box with set answers taken from the Pricing page.
+// It never guesses. Anything it has no answer for is handed to Anthony.
+(function () {
+  const TEL = '<a href="tel:+15612603951">' + CONTACT_PHONE + "</a>";
+  const DEMO = '<a href="/#demo">request your free demo</a>';
+  const TOPICS = [
+    { q: "What does a site cost?", k: ["cost", "+price", "pricing", "much", "cheap", "expensive", "budget", "fee", "rate", "$"],
+      a: "Builds are fixed packages: Starter $999 (up to 5 pages), Growth $1,950 (up to 10 pages with service and city pages, the recommended one) and Pro $2,950 (quote calculator or online payments, up to 15 pages). Half to start, half at launch. Every build is quoted with a care plan, and you approve one number in writing before work starts. <a href=\"/pricing\">See what's included</a>." },
+    { q: "How does the free demo work?", k: ["demo", "free", "try", "preview", "sample", "risk", "catch"],
+      a: "Send your business name and email. Within 5 business days you get a working link to your new home page with your name, services and colors. Like it and we finish the full site. If not, you owe nothing. I take 2 free demos a week, so " + DEMO + " now." },
+    { q: "How long does it take?", k: ["long", "time", "timeline", "fast", "when", "weeks", "days", "soon", "launch", "deadline"],
+      a: "The free demo arrives within 5 business days. After you pick a plan, Starter sites go live in about 2 weeks, Growth in 2 to 3 weeks and Pro in 3 to 4 weeks." },
+    { q: "Who owns the site?", k: ["own", "owner", "ownership", "domain", "code", "leave", "contract", "locked"],
+      a: "You do. The domain is registered in your name, the code lives in an account you own, and hosting is under your email. On the 12-month monthly option, it is fully yours once the term is paid." },
+    { q: "What follow-up and AI do you offer?", k: ["automation", "automate", "automatic", "follow", "review", "form", "lead", "reply", "ai", "phone", "receptionist"],
+      a: "Lead follow-up from $149: new leads go to your inbox or phone, the customer gets an instant reply, quotes that go quiet get a follow-up and finished jobs get a review request. AI phone answering is quoted after a 15-minute call. The AI chat assistant is $299 to set up, then $49 a month. <a href=\"/pricing#addons\">See all add-ons</a>." },
+    { q: "Tell me about the AI chat assistant", k: ["assistant", "chat", "chatbot", "bot", "agent", "book", "booking", "appointment", "calendar", "+ai"],
+      a: "It is a chat box on your site trained on your services, area, hours and prices. It answers questions, books appointments into your calendar and hands anything it doesn't know to you. $299 setup, then $49 a month." },
+    { q: "Do I need a care plan?", k: ["+care", "+hosting", "host", "maintenance", "edit", "update", "backup"],
+      a: "Every build is quoted with one because a site nobody looks after slowly breaks, but you can skip it and host the site yourself. Care is $79 a month: hosting, backups, monitoring and 30 minutes of edits. Care Plus is $179 a month with 2 hours of edits, Google Business Profile posts and a monthly report. Month to month with 30 days notice." },
+    { q: "Can I pay monthly?", k: ["installment", "spread", "afford", "payment", "+pay", "monthly", "month", "deposit", "half", "upfront"],
+      a: "Builds are half to start and half at launch. If you would rather not pay up front, you can spread Starter or Growth with Care included over 12 months: $165 a month for Starter, $245 a month for Growth. The first month is due at signing and there is a 12-month minimum." },
+    { q: "Can you rebuild my current site?", k: ["rebuild", "redesign", "existing", "already", "current", "old", "wordpress", "wix", "squarespace", "move"],
+      a: "Yes, at the same prices. I keep the copy and photos worth keeping, and your email keeps working the whole time." },
+    { q: "Do I have to get on a call?", k: ["call", "phone", "meeting", "zoom", "talk", "speak", "contact", "human", "person", "anthony", "text", "email"],
+      a: "No call is needed. If you would rather talk, call or text Anthony at " + TEL + " or email <a href=\"mailto:" + CONTACT_EMAIL + "\">" + CONTACT_EMAIL + "</a>." },
+    { q: "Which trades do you build for?", k: ["trade", "trades", "plumber", "plumbing", "roofer", "roofing", "hvac", "painter", "painting", "detailing", "detailer", "pressure", "washing", "industry"],
+      a: "Plumbing, roofing, HVAC, painting, mobile detailing and pressure washing, mostly in Orlando and Palm Beach County. <a href=\"/trades\">Pick your trade</a> to see what goes into the site." },
+    { q: "What is founding client pricing?", k: ["founding", "discount", "deal", "special", "limited"],
+      a: "These prices are lower than where they will land once there are more launches behind them. The next 5 clients lock them in." },
+    { q: "Do you manage social media?", k: ["social", "instagram", "facebook", "post", "+posting"],
+      a: "Yes. The Social Media Manager turns your job photos into 3 posts a week on Instagram and Facebook, answers comments and messages, and sends new leads to your phone. You see each week's posts before they go out. $299 setup, then $199 a month." },
+    { q: "Where do you work?", k: ["where", "area", "areas", "location", "local", "orlando", "florida", "remote", "state", "near"],
+      a: "tsKaizen is based in Orlando and mostly works with home and mobile service businesses in Orlando and Palm Beach County. If you run a local service business elsewhere in Florida, send it over anyway." },
+  ];
+  const STARTERS = [0, 1, 2, 3, 4, 6];
+  const esc = function (t) { const d = document.createElement("div"); d.textContent = t; return d.innerHTML; };
+
+  const launch = document.createElement("button");
+  launch.type = "button"; launch.className = "qa-launch"; launch.setAttribute("aria-haspopup", "dialog");
+  launch.setAttribute("aria-label", "Open the questions assistant");
+  launch.innerHTML = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h14v9H9l-4 3v-3H3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span class="qa-label">Questions?</span>';
+  const panel = document.createElement("section");
+  panel.className = "qa-panel"; panel.hidden = true; panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "tsKaizen assistant");
+  panel.innerHTML = '<div class="qa-head"><div><b>tsKaizen assistant</b><span>Set answers about prices, timing and how it works. Anything else goes to Anthony.</span></div><button type="button" class="qa-close" aria-label="Close assistant">&times;</button></div>'
+    + '<div class="qa-log" role="log" aria-live="polite"></div><div class="qa-chips"></div>'
+    + '<form class="qa-form"><input type="text" aria-label="Type a question" placeholder="Type a question" autocomplete="off" maxlength="200"><button type="submit">Send</button></form>';
+  document.body.appendChild(launch); document.body.appendChild(panel);
+  const log = panel.querySelector(".qa-log"), chips = panel.querySelector(".qa-chips"), input = panel.querySelector("input");
+  let started = false;
+
+  function say(html, who) {
+    const p = document.createElement("p");
+    p.className = "qa-msg " + who; p.innerHTML = html;
+    log.appendChild(p); log.scrollTop = log.scrollHeight;
+  }
+  function setChips(ids) {
+    chips.innerHTML = "";
+    ids.forEach(function (i) {
+      const b = document.createElement("button");
+      b.type = "button"; b.textContent = TOPICS[i].q;
+      b.addEventListener("click", function () { ask(TOPICS[i].q, i); });
+      chips.appendChild(b);
+    });
+  }
+  // Plurals count as the same word, and a keyword starting with "+" counts double
+  const stem = function (w) { return w.length > 3 && w.charAt(w.length - 1) === "s" ? w.slice(0, -1) : w; };
+  function match(text) {
+    const words = text.toLowerCase().replace(/[^a-z0-9$ ]/g, " ").split(/\s+/).map(stem);
+    let best = -1, score = 0;
+    TOPICS.forEach(function (t, i) {
+      let n = 0;
+      t.k.forEach(function (k) {
+        const strong = k.charAt(0) === "+", w = strong ? k.slice(1) : k;
+        if (words.indexOf(stem(w)) > -1 || (w === "$" && text.indexOf("$") > -1)) n += strong ? 2 : 1;
+      });
+      if (n > score) { score = n; best = i; }
+    });
+    return best;
+  }
+  function ask(text, id) {
+    say(esc(text), "me");
+    const i = id === undefined ? match(text) : id;
+    track("assistant_question", { topic: i > -1 ? TOPICS[i].q : "unanswered" });
+    if (i > -1) say(TOPICS[i].a, "bot");
+    else say("I don't have a set answer for that one, and I won't guess. Text or call Anthony at " + TEL + ", or " + DEMO + " and ask in your reply.", "bot");
+    const rest = [];
+    TOPICS.forEach(function (t, k) { if (k !== i && rest.length < 5) rest.push(k); });
+    setChips(rest);
+  }
+  function open() {
+    panel.hidden = false; launch.hidden = true;
+    if (!started) {
+      started = true;
+      say("Hi. I can answer the common questions about tsKaizen. Pick one below or type your own.", "bot");
+      setChips(STARTERS);
+    }
+    track("assistant_open");
+    input.focus({ preventScroll: true });
+  }
+  function close() { panel.hidden = true; launch.hidden = false; launch.focus(); }
+  // On phones the button waits until the visitor scrolls past the top of the page, so it never covers the headline area
+  const phone = window.matchMedia && matchMedia("(max-width: 720px)");
+  function late() { launch.classList.toggle("qa-wait", !!(phone && phone.matches) && window.scrollY < 480); }
+  window.addEventListener("scroll", late, { passive: true }); window.addEventListener("resize", late); late();
+  launch.addEventListener("click", open);
+  panel.querySelector(".qa-close").addEventListener("click", close);
+  panel.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+  panel.querySelector("form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const v = input.value.trim();
+    if (!v) return;
+    input.value = ""; ask(v);
+  });
 })();
