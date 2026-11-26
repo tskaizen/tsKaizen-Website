@@ -703,3 +703,12 @@ fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; }
 .demo-includes { background: var(--tint-sky); border: 0; }
 .demo-includes .checks { font-size: 16px; }
 .plan-badge { background: var(--coral-text); }
+
+/* Home headline: always two even lines. The font size follows the width of its own column
+   (the widest line, "More booked jobs.", is about 7.5 times the font size), so nothing wraps or overflows
+   at any screen width, and the rotating word never pushes it onto a third line. */
+.hero-copy { container-type: inline-size; }
+.hero-title-fit { font-size: clamp(32px, 12.4cqw, 80px); line-height: 1; }
+.hero-title-fit .ln-in { white-space: nowrap; }
+/* Text gets slightly wider as it gets smaller, so phones need a little more room */
+@container (max-width: 480px) { .hero-title-fit { font-size: clamp(30px, 11.6cqw, 56px); } }
