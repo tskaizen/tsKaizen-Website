@@ -700,4 +700,6 @@ fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; }
 .spread-prices small { margin-top: 6px; font: 600 14px var(--body); color: var(--ink-2); }
 @media (max-width: 960px) { .spread { grid-template-columns: 1fr; } .spread .btn { justify-self: start; } }
 .foot-top a { color: inherit; }
+.demo-includes { background: var(--tint-sky); border: 0; }
+.demo-includes .checks { font-size: 16px; }
 .plan-badge { background: var(--coral-text); }
