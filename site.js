@@ -1,6 +1,6 @@
 // ---- Config ----
 const FORM_ENDPOINT = "https://formspree.io/f/xkolwdag";
-const CONTACT_EMAIL = "anthonypichardo31@tskaizen.com";
+const CONTACT_EMAIL = "anthony@tskaizen.com";
 const QUOTE_TURNAROUND = "2 business days";
 
 // Every page opens at the top, including when returning with Back
@@ -31,7 +31,7 @@ document.querySelectorAll('.nav-links a[aria-current="page"], .brand').forEach(f
 })();
 
 // Fill shared values
-document.querySelectorAll("[data-email]").forEach(function (el) { el.textContent = CONTACT_EMAIL; });
+document.querySelectorAll("[data-email]").forEach(function (el) { el.textContent = CONTACT_EMAIL; if (el.tagName === "A") el.href = "mailto:" + CONTACT_EMAIL; });
 document.querySelectorAll("[data-turnaround]").forEach(function (el) { el.textContent = QUOTE_TURNAROUND; });
 document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
@@ -122,8 +122,9 @@ document.querySelectorAll("form[data-formspree]").forEach(function (form) {
   if (!sel) return;
   let plan = "";
   try { plan = new URLSearchParams(location.search).get("plan") || ""; } catch (e) {}
-  const map = { launch: ["q-plan", "Launch"], growth: ["q-plan", "Growth"], pro: ["q-plan", "Pro"], custom: ["q-plan", "Custom"], care: ["q-care", "Care"], careplus: ["q-care", "Care Plus"] };
+  const map = { starter: ["q-plan", "Starter"], launch: ["q-plan", "Starter"], monthly: ["q-plan", "Monthly"], growth: ["q-plan", "Growth"], pro: ["q-plan", "Pro"], custom: ["q-plan", "Custom"], care: ["q-care", "Care"], careplus: ["q-care", "Care Plus"] };
   if (map[plan]) document.getElementById(map[plan][0]).value = map[plan][1];
+  try { const tr = new URLSearchParams(location.search).get("trade"); const ts = document.getElementById("q-trade"); if (tr && ts) { [].forEach.call(ts.options, function (o) { if (o.value.toLowerCase() === tr.toLowerCase()) ts.value = o.value; }); } } catch (e) {}
   if (plan === "care" || plan === "careplus") sel.value = "Care";
 })();
 
