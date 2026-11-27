@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "impeccable": { "source": { "source": "github", "repo": "pbakaus/impeccable" } },
+    "hyperframes": { "source": { "source": "github", "repo": "heygen-com/hyperframes" } },
+    "last30days-skill": { "source": { "source": "github", "repo": "mvanhorn/last30days-skill" } }
+  },
+  "enabledPlugins": {
+    "impeccable@impeccable": true,
+    "playwright@claude-plugins-official": true,
+    "hyperframes@hyperframes": true,
+    "last30days@last30days-skill": true
+  }
+}
